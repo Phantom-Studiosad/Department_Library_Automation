@@ -1443,8 +1443,9 @@ body{
 }
 
 #msform .action-button {
-  width: 100px;
-  background: skyblue;
+  width: 150px;
+  background: linear-gradient(45deg,rgb(183, 103, 253) 0%,rgb(10, 221, 253) 180%);
+  border-radius: 15px;
   font-weight: bold;
   color: white;
   border: 0 none;
@@ -1488,11 +1489,20 @@ select.list-dt:focus {
   border-bottom: 2px solid skyblue
 }
 
-.card {
+.rcard {
   z-index: 0;
-  border: none;
-  border-radius: 0.5rem;
-  position: relative
+  position: relative;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  text-align: center;
+  background-color: #121b23;
+  color: white;
+  border-radius: 20px;
+  justify-content: center;
+  align-items: center;
+  transition: transform 330ms ease-in-out;
+  border: 2px solid;
+  border-color: #afd7f5;
 }
 
 .fs-title {
@@ -1510,7 +1520,8 @@ select.list-dt:focus {
 }
 
 #progressbar .active {
-  color: #000000
+  color: white;
+
 }
 
 #progressbar li {
@@ -1607,4 +1618,12 @@ select.list-dt:focus {
   align-items: center;
   padding-left: 0;
   margin-right: .75rem;
+}
+
+.containerr-fluid{width: 100%;
+padding-right: 15px;
+padding-left: 15px;
+margin-right: auto;
+margin-left: auto;
+margin-bottom: 3rem;
 }
