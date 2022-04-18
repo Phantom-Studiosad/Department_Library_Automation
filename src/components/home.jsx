@@ -56,7 +56,13 @@ function Home(){
               <div id="colorlib-page">
                   <div id="container-wrap">
                   <Topbar></Topbar>   
-                  <Bod></Bod>  
+                  <Bod></Bod>  <br></br>
+                  <div class="searchBox">
+                            <input class="searchInput"type="text" name="" placeholder="Search"></input>
+                            <button class="searchButton" href="#">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div> 
                   <Foot></Foot>
                   
                   {showButton && (
