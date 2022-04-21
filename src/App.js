@@ -15,6 +15,7 @@ import GHomepage from './components/ghomepage';
 import Book from './components/book';
 import BookModify from './components/book_modify';
 import BookDelete from './components/book_delete';
+import BookSearch from './components/book_search';
 import User from './components/user';
 import UserModify from './components/user_modify';
 import UserDelete from './components/user_delete';
@@ -39,6 +40,7 @@ class App extends Component {
           <Route exact path='/ghomepage' component={GHomepage}/>
           <Route exact path='/ahomepage' component={AHomepage}/>
           <Route exact path='/book' component={Book}/>
+          <Route exact path='/book_search' component={BookSearch}/>
           <Route exact path='/book_modify' component={BookModify}/>
           <Route exact path='/book_delete' component={BookDelete}/>
           <Route exact path='/user' component={User}/>

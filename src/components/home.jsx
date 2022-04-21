@@ -5,6 +5,7 @@ import Foot from './footer';
 import Topbar from './topbar.jsx'
 import BarLoader from "react-spinners/BarLoader";
 import splash_bg from '../images/Library.gif'
+import { Link } from "react-router-dom";
 
 function Home(){
     const [showButton, setShowButton] = useState(false);
@@ -59,10 +60,12 @@ function Home(){
                   <Bod></Bod>  <br></br>
                   <div class="searchBox">
                             <input class="searchInput"type="text" name="" placeholder="Search"></input>
-                            <button class="searchButton" href="#">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div> 
+                            <Link to="/booksearch">
+                              <button class="searchButton">
+                                  <i class="fa fa-search"></i>
+                              </button>
+                            </Link>
+                  </div> 
                   <Foot></Foot>
                   
                   {showButton && (

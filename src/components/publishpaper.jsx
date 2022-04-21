@@ -4,8 +4,7 @@ import "../App.css"
 import Foot from './footer';
 import { Link } from "react-router-dom";
 import splash_bg from '../images/Library.gif'
-import Avatar from "../images/avatar.png"
-import Popup from 'reactjs-popup';
+
 
 
 function PublishPaper(){
