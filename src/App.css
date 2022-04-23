@@ -1685,13 +1685,11 @@ color : #2f3640;
 }
 
 .searchBox1 {
-  position: absolute;
-  top: 30%;
-  left: 40%;
   background: #2f3640;
   border-radius: 40px;
   padding: 10px;
-
+  width: 300px;
+  margin-left: 42rem;
 }
 
 .searchButton1 {
@@ -1724,5 +1722,141 @@ color : #2f3640;
   }
 
   .book_header{
-    padding-bottom: 20rem;
+    padding-bottom: 2rem;
+  }
+
+  .list {
+    display: grid;
+    margin: 20px 0 50px 0;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 1fr;
+    grid-gap: 1em;
+  }
+
+  .card-container {
+    width: 250px;
+    margin: 0 auto;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 4px solid;
+    border-color: #afd7f5;
+  }
+
+  .card-container:hover{
+    -ms-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    transform: scale(1.05);
+    transition: transform 330ms ease-in-out;
+    border: 4px solid #ecb58c !important;
+    box-shadow: #afd7f5 0px 0px 20px 2px;
+    cursor: pointer;
+  }
+  
+
+  .card-container img{
+    width: 100%;
+    height: 250px;
+  }
+
+
+  .desc{
+    height: 130px;
+    padding: 10px;
+  }
+
+  .desc h2{
+    font-size: 0.9em;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .desc h3, p{
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+  }
+
+  .desc h3{
+    color: #6c757d;
+    font-size: 0.8em;
+    padding: 5px 0 5px 0 ;
+  }
+
+  .search_area{
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10rem;
+  }
+
+  @media screen and (max-width: 1200px) {
+    .searchBox1{
+      margin-left: 32rem;
+    }
+  
+    .list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  @media screen and (max-width: 990px) {
+    .searchBox1{
+      margin-left: 22rem;
+    }
+  }
+
+  @media screen and (max-width: 900px) {
+  
+    .list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media screen and (max-width: 760px) {
+    .searchBox1{
+      margin-left: 20rem;
+    }
+  }
+  
+  @media screen and (max-width: 700px) {
+    .searchBox1{
+      margin-left: 15rem;
+    }
+  }
+  
+  @media screen and (max-width: 600px) {
+    .searchBox1{
+      margin-left: 10rem;
+    }
+  }
+
+  @media screen and (max-width: 530px) {
+    .list {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+  
+  @media screen and (max-width: 510px) {
+    .searchBox1{
+      margin-left: 5rem;
+    }
+  }
+  
+  @media screen and (max-width: 440px) {
+    .searchBox1{
+      margin-left: 3rem;
+    }
+    .searchInput {
+      line-height: 20px;
+    }
+  }
+
+  .sort{
+    float: right;
+    background: #2f3640;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 1rem;
+    margin-right: 10px;
   }

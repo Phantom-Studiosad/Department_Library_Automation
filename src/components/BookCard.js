@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 
 const BookCard = (props) => {
     return (
-        <div className="list">
-            {
-                props.books.map((book) => {
-                    return <BookCard key={book.id} info={book}/>
-                })
-            }
+        <div className="card-container">
+            <img src={props.image} alt=""></img>
+            <div class="desc">
+                <h2>{props.title}</h2>
+                <h3>Author: {props.author}</h3>
+                <p>Published Date: {props.published === '0000' ? 'Not available' : props.published.substring(0,4)}</p>
+            </div>
         </div>
     );
 }
