@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PuffLoader from "react-spinners/PuffLoader";
-import "../App.css"
+import "../App.css";
 import Foot from './footer';
 import Navbar from './navbar';
 import Img1 from "../images/contact.gif"
@@ -61,7 +61,7 @@ function Contact(){
             {
                 loading?
                 <div class="cus2">
-                    <img src={splash_bg} class="splash_logo1"></img>
+                    <img src={splash_bg} class="splash_logo1" alt="logo"></img>
                     <div class="cus1">
                     <PuffLoader
                     color={"#db2cc0"} 

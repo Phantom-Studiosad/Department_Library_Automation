@@ -164,6 +164,7 @@ body{
 .send{
   background: linear-gradient(45deg,rgb(183, 103, 253) 0%,rgb(10, 221, 253) 180%);
   border-radius: 15px;
+  color: white;
 }
 
 .login{
@@ -766,6 +767,8 @@ body{
   border-radius: 15px;
   border: 1px solid;
   border-color: #afd7f5;
+  text-decoration: none;
+  color: white;
 }
 
 .loginp > a{
@@ -1226,6 +1229,10 @@ body{
   transition: transform 330ms ease-in-out;
   border: 2px solid;
   border-color: #31ec4a;
+}
+
+h2{
+  color:#000000;
 }
 
 .card1 > h2{
@@ -1740,6 +1747,7 @@ color : #2f3640;
     overflow: hidden;
     border: 4px solid;
     border-color: #afd7f5;
+    padding-bottom: 8rem;
   }
 
   .card-container:hover{
@@ -1859,4 +1867,100 @@ color : #2f3640;
     padding: 10px;
     margin-top: 1rem;
     margin-right: 10px;
+  }
+
+  .margin {
+    margin: 0em 8em;
+  }
+  
+  @media only screen and (max-width: 600px) {
+    .margin {
+      margin: 0;
+    }
+  }
+  
+  .search {
+    padding: 20px;
+    margin: 20px;
+    display: grid;
+    justify-content: center;
+  }
+  
+  .searchForm {
+    display: grid;
+    justify-content: space-around;
+    margin: 2em 8em;
+  }
+  
+  .spinner {
+    display: grid;
+    justify-content: center;
+  }
+  
+  .book-image {
+    max-height: 15rem;
+    max-width: 10rem;
+  }
+  
+  .book-image:hover {
+    box-shadow: 1px 1px 3px 4px #afdeb1;
+    animation: zoomin 0.5s;
+  }
+  
+  .book-box {
+    background-color: #121b23;  
+    color: white;
+    margin: 4rem;
+  }
+
+  .book-box p{
+    color: white;
+  }
+  
+  .card-cascade-narrower img {
+      transform: scale(0.92) translateY(-2rem) translateX(-1em);
+      margin-bottom: -1rem;
+    }
+  
+  
+  .carousel {
+    display: grid;
+    justify-content: center;
+  }
+  
+  .carousel-indicators li {
+    visibility: hidden;
+  }
+  
+  .carousel-btn {
+    margin: 5px;
+  }
+  
+  .authors {
+    padding: 8vh;
+    background: #0f2027; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      to right,
+      #0f2027,
+      #203a43,
+      #2c5364
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to right,
+      #0f2027,
+      #203a43,
+      #2c5364
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: white;
+  }
+  
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+  }
+  
+  .nyt-img {
+    max-height: 15rem;
+    max-width: 10rem;
   }

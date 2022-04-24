@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import  { Link } from 'react-router-dom'
 import "../App.css"
 import Img1 from "../images/img1.jpg"
 import Img2 from "../images/book.png"
@@ -14,13 +15,16 @@ export default class Bod extends Component {
             <div class="container">
                 <div class="main-heading">
                     <h1>E-Library Management System</h1>
-                    <p class="subhead">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    <p class="subhead">Analytics driven personalized learning experience.</p>
                 </div>   
                 <div class="row3">
                     <div class="column">
                         <div class="card1">
-                            <div class="im"><img class="card_img" src={Img1} alt="Vector Image"></img> </div>                              
-                            <h2>Search Books</h2>
+                            <Link to="/opac">
+                                <div class="im"><img class="card_img" src={Img1} alt="Vector Image"></img> </div>                              
+                                <h2>Search Books</h2>
+                            </Link>
+                            
                         </div>
                     </div>   
                     <div class="column">
@@ -31,8 +35,10 @@ export default class Bod extends Component {
                     </div> 
                     <div class="column">
                         <div class="fine_card">
-                           <img class="card_img" src={Img3} alt="Vector Image"></img>
-                            <h2>Fine Payment</h2>
+                            <Link to="/login">
+                                <img class="card_img" src={Img3} alt="Vector Image"></img>
+                                <h2>Fine Payment</h2>
+                            </Link>                           
                         </div>
                     </div>                                   
                 </div>
@@ -60,20 +66,26 @@ export default class Bod extends Component {
                 <div class="row3">
                     <div class="column">
                         <div class="e-book_card">
-                            <img class="card_img" src={Img4} alt="Vector Image"></img>
-                            <h2>E-book's</h2>
+                            <Link to="/opac">
+                                <img class="card_img" src={Img4} alt="Vector Image"></img>
+                                <h2>E-book's</h2>
+                            </Link>                            
                         </div>
                     </div> 
                     <div class="column">
                         <div class="card2">
-                            <img class="card_img" src={Img5} alt="Vector Image"></img>
-                            <h2>Book Data</h2>
+                            <Link to="/alogin">
+                                <img class="card_img" src={Img5} alt="Vector Image"></img>
+                                <h2>Book Data</h2>
+                            </Link>                            
                         </div>
                     </div> 
                     <div class="column">
                         <div class="card1">
-                           <img class="card_img" src={Img6} alt="Vector Image"></img>
-                            <h2>Notification</h2>
+                            <Link to="/login">
+                                <img class="card_img" src={Img6} alt="Vector Image"></img>
+                                <h2>Notification</h2>
+                            </Link>
                         </div>
                     </div>   
                 </div>

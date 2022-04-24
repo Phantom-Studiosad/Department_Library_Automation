@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import '../App.css';
 import Bod from './bod';
 import Foot from './footer';
 import Topbar from './topbar.jsx'
 import BarLoader from "react-spinners/BarLoader";
 import splash_bg from '../images/Library.gif'
-import { Link } from "react-router-dom";
+import '../App.css';
 
 function Home(){
     const [showButton, setShowButton] = useState(false);
@@ -57,15 +56,7 @@ function Home(){
               <div id="colorlib-page">
                   <div id="container-wrap">
                   <Topbar></Topbar>   
-                  <Bod></Bod>  <br></br>
-                  <div class="searchBox">
-                            <input class="searchInput"type="text" name="" placeholder="Search"></input>
-                            <Link to="/booksearch">
-                              <button class="searchButton">
-                                  <i class="fa fa-search"></i>
-                              </button>
-                            </Link>
-                  </div> 
+                  <Bod></Bod>
                   <Foot></Foot>
                   
                   {showButton && (

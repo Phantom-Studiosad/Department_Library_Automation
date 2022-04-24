@@ -18,7 +18,6 @@ function navbar(){
                     <ul class="nav navbar-nav navbar-right">
                         <li><Link to="/opac"><b>OPAC</b></Link></li>
                         <li><Link to="/blog"><b>Blog</b></Link></li>
-                        <li><Link to="/book_search"><b>Search</b></Link></li>
                         <li><Link to="/faq"><b>FAQs</b></Link></li>
                         <li><Link to="/contact"><b>Contact</b></Link></li>
                         <li><Link to="/login" style={{margin:"0px",padding:"0px"}}><button class="btn navbar-btn login"><span class="fa fa-sign-in"></span> Login</button></Link></li>

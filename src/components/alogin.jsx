@@ -3,10 +3,8 @@ import PuffLoader from "react-spinners/PuffLoader";
 import "../App.css"
 import Foot from './footer';
 import Navbar from './navbar';
-import Img1 from "../images/login.png"
 import  { Link } from 'react-router-dom'
 import splash_bg from '../images/Library.gif'
-import StarfieldAnimation from './animation/starfieldanimation'
 import app from '../firebase'
 import Popup from 'reactjs-popup';
 import {
@@ -94,7 +92,7 @@ function ALogin(){
           {
             loading?
             <div class="cus2">
-                <img src={splash_bg} class="splash_logo1"></img>
+                <img src={splash_bg} class="splash_logo1" alt="logo"></img>
                 <div class="cus1">
                 <PuffLoader
                 color={"#db2cc0"} 

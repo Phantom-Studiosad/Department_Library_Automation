@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import BookCard from './BookCard';
 
 const BookList = (props) => {
@@ -12,6 +12,9 @@ const BookList = (props) => {
                                 title={book.volumeInfo.title}
                                 author={book.volumeInfo.authors}
                                 published={book.volumeInfo.publishedDate}
+                                pages={book.volumeInfo.pageCount}
+                                read={book.volumeInfo.previewLink}
+                                details={book.volumeInfo.industryIdentifiers[0].identifier}
                            />
                 })
             }
