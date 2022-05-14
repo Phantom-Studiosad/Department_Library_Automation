@@ -95,7 +95,7 @@ function UserDelete(){
                                                 </form>
                                                 <div class="text-center text-md-left" style={{padding:"2rem"}}>
                                                     <button class="btn navbar-btn send margin-b" onClick={deleteUser}><span class="fa fa-edit"></span> Remove User</button><br></br>
-                                                    <Link to="/User"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-arrow-left"></span> Back</button> </Link>
+                                                    <Link to="/User"><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-arrow-left"></span> Back</button> </Link>
                                                 </div>
                                             </div> 
                                         </div>

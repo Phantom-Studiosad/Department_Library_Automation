@@ -83,21 +83,19 @@ function BookDelete(){
                                                                 <label for="name" class="">Book ID:</label>
                                                                 <input type="text" id="name" name="name" class="form-control" onChange={(event) => { setBookId(event.target.value); }} required></input>                                                        
                                                             </div>
-                                                        </div>                                            
-                                                    </div>    
-                                                    <div class="row">
+                                                        </div>   
                                                         <div class="col-md-6">
                                                             <div class="md-form mb-0">
                                                                 <label for="subject" class="">Book ISBN:</label>
                                                                 <input type="text" id="subject" name="subject" class="form-control" onChange={(event) => { setIsbn(event.target.value); }} required></input>
                                                                 
                                                             </div>
-                                                        </div>
-                                                    </div>
+                                                        </div>                                         
+                                                    </div>    
                                                 </form>
                                                 <div class="text-center text-md-left" style={{padding:"2rem"}}>
                                                     <button class="btn navbar-btn send margin-b" onClick={bookDelete}><span class="fa fa-edit"></span> Delete</button><br></br>
-                                                    <Link to="/book"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-arrow-left"></span> Back</button> </Link>
+                                                    <Link to="/book"><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-arrow-left"></span> Back</button> </Link>
                                                 </div>
                                             </div> 
                                         </div>

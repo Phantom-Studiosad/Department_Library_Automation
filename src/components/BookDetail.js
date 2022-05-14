@@ -17,7 +17,9 @@ const BookDetail = ({ match }) => {
 		)
 			.then((res) => res.json())
 			.then((res) => {
+				console.log(res);
 				setBook(res.items[0]);
+				
 			})
 			.catch(console.error);
 	}, []);

@@ -6,13 +6,8 @@ import  {Link } from 'react-router-dom'
 import app from '../firebase';
 import { getDatabase, ref, set } from "firebase/database";
 import {
-    GoogleAuthProvider,
     getAuth,
-    signInWithPopup,
-    signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
-    sendPasswordResetEmail,
-    signOut,
 } from "firebase/auth"
 
 function User(){
@@ -24,7 +19,15 @@ function User(){
     const [contact, setContact] = useState("")
     const [department, setDepartment] = useState("")
     const [rollNum, setRollNum] = useState("")
-    const [year, setYear] = useState(0)
+    const [year, setYear] = useState("")
+    const [userEmail, setuserEmail] = useState("");
+    const auth = getAuth(app);
+    
+
+    const  constructor = () =>{
+        const user = auth.currentUser;
+        setuserEmail(user.email);
+    };
 
     useEffect(() => {
       window.addEventListener("scroll", () => {
@@ -48,7 +51,7 @@ function User(){
             email: email,
             password: password,
             contactNum : contact,
-            year: year
+            year: year,
         }).then(()=>{
             createUserWithEmailAndPassword(auth,email,password).then((u)=>{
                 console.log(u)
@@ -70,7 +73,7 @@ function User(){
     };
     return (
         <div>
-                <div  id="colorlib-page">
+                <div  id="colorlib-page" onLoad={constructor}>
                     <div id="container-wrap">
                         <div class="hero-gradient1">
                             <div class="hero-fadeout-gradient1">
@@ -103,7 +106,7 @@ function User(){
                                                         </div>                                            
                                                         <div class="col-md-6">
                                                             <div class="md-form mb-0">
-                                                                <label for="email" class="">Last Name:</label>
+                                                                <label for="name" class="">Last Name:</label>
                                                                 <input type="text" id="email" name="email" class="form-control" onChange={(event) => { setLname(event.target.value); }} required></input>                                                        
                                                             </div>
                                                         </div>
@@ -111,22 +114,29 @@ function User(){
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="md-form mb-0">
-                                                                <label for="name" class="">Email:</label>
-                                                                <input type="text" id="name" name="name" class="form-control" onChange={(event) => { setEmail(event.target.value); }} required></input>                                                        
+                                                                <label for="email" class="">Email:</label>
+                                                                <input type="email" id="email" name="name" class="form-control" onChange={(event) => { setEmail(event.target.value); }} required></input>                                                        
                                                             </div>
                                                         </div>                                            
                                                         <div class="col-md-6">
                                                             <div class="md-form mb-0">
-                                                                <label for="email" class="">Contact No:</label>
-                                                                <input type="text" id="email" name="email" class="form-control" onChange={(event) => { setContact(event.target.value); }} required></input>                                                        
+                                                                <label for="mobile" class="">Contact No:</label>
+                                                                <input type="text" id="mobile" name="mobile" class="form-control" onChange={(event) => { setContact(event.target.value); }} required></input>                                                        
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-md-12">
+                                                        <div class="col-md-6">
                                                             <div class="md-form mb-0">
                                                                 <label for="subject" class="">Roll No:</label>
-                                                                <input type="text" id="subject" name="subject" class="form-control" onChange={(event) => { setRollNum(event.target.value); setYear(2000+parseInt((event.target.value).substring(9,11))) }} required></input>
+                                                                <input type="text" id="subject" name="subject" class="form-control" onChange={(event) => { setRollNum(event.target.value); }} required></input>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="md-form mb-0">
+                                                                <label for="subject" class="">Batch:</label>
+                                                                <input type="text" id="subject" name="subject" class="form-control" onChange={(event) => { setYear(event.target.value)}} required></input>
                                                                 
                                                             </div>
                                                         </div>
@@ -148,9 +158,9 @@ function User(){
                                                 </form>
                                                 <div class="text-center text-md-left" style={{padding:"2rem"}}>
                                                     <button class="btn navbar-btn send margin-b" onClick={addUser}><span class="fa fa-save"></span> Save</button><br></br>
-                                                    <Link to="/user_modify"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-edit"></span> Modification</button></Link>                                                        
-                                                    <Link to="/user_delete"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-step-backward"></span> Deletion</button></Link> <br></br>
-                                                    <Link to="/ahomepage"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-arrow-left"></span> Back</button> </Link>
+                                                    <Link to="/user_modify"><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-edit"></span> Modification</button></Link>                                                        
+                                                    <Link to="/user_delete"><button class="btn navbar-btn guestp2 margin-b"><span class="fa fa-step-backward"></span> Deletion</button></Link> <br></br>
+                                                    <Link to={`/ahomepage/${userEmail}`}><button class="btn navbar-btn guestp margin-b"><span class="fa fa-arrow-left"></span> Back</button> </Link>
                                                 </div>
                                             </div> 
                                         </div>

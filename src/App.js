@@ -39,7 +39,7 @@ class App extends Component {
           <Route exact path='/rhomepage/:id' component={RHomepage}/>
           <Route exact path='/publishpaper' component={PublishPaper}/>
           <Route exact path='/ghomepage' component={GHomepage}/>
-          <Route exact path='/ahomepage' component={AHomepage}/>
+          <Route exact path='/ahomepage/:id' component={AHomepage}/>
           <Route exact path='/book' component={Book}/>
           <Route path='/bookdetails/:book'
 						render={(routerProps) => {

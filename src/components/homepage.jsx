@@ -6,10 +6,41 @@ import { Link } from "react-router-dom";
 import splash_bg from '../images/Library.gif'
 import Avatar from "../images/avatar.png"
 import Popup from 'reactjs-popup';
+import app from '../firebase';
+import { getDatabase, ref, child, get } from "firebase/database";
+import {
+    getAuth,
+    signOut,
+} from "firebase/auth"
 
 
 function Homepage(){
+    const auth = getAuth(app);
     const [showButton, setShowButton] = useState(false);
+    const [userEmail, setuserEmail] = useState("");
+    const [fname, setFname] = useState("");
+    const [lname, setLname] = useState("");
+    const [department, setDepartment] = useState("");
+
+   const  constructor = () =>{
+        const user = auth.currentUser;
+        const roll = userEmail.substring(8,16);
+        if (user !== null) {
+            setuserEmail(user.email);
+            const dbRef = ref(getDatabase(app));
+            get(child(dbRef, `Users/${roll}`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                setFname(snapshot.val().firstName.toUpperCase());
+                setLname(snapshot.val().lastName.toUpperCase());
+                setDepartment(snapshot.val().department.toUpperCase());
+            } else {
+                console.log("No data available");
+            }
+            }).catch((error) => {
+            console.error(error);
+            });
+        };
+    };
     useEffect(() => {
       window.addEventListener("scroll", () => {
         if (window.pageYOffset > 100) {
@@ -35,6 +66,11 @@ function Homepage(){
         behavior: 'smooth' // for smoothly scrolling
       });
     };
+
+    const logout = async () => {
+        await signOut(auth);
+        window.alert("User logged out successfully!")
+      };
     return (
         <div>
           {
@@ -49,7 +85,7 @@ function Homepage(){
                 </div>
             </div>
             :
-            <div  id="colorlib-page">
+            <div  id="colorlib-page" onLoad={constructor}>
               <div id="container-wrap">
                     <div class="hero-gradient1">
                         <div class="hero-fadeout-gradient1">
@@ -71,6 +107,7 @@ function Homepage(){
                                                 <li><Link><b><span class="fa fa-envelope" title='Messages'></span></b></Link></li>
                                                 <li><Link><b><span class="fa fa-bell" title='Notifications'></span></b></Link></li>
                                                 <li><Link to="/profilepage"><b><span class="fa fa-user" title='Profile'></span></b></Link></li>
+                                                <li><Link to="/login" style={{margin:"0px",padding:"0px"}}><button class="btn navbar-btn login" onClick={logout}><span class="fa fa-sign-out"></span> LogOut</button></Link></li>
                                             </ul>      
                                         </div>
                                     </div>
@@ -88,9 +125,9 @@ function Homepage(){
                                                     <p class="w3-center"><img src={Avatar} class="w3-circle" alt="Avatar" style={{height:"106px",width:"106px"}}></img></p>
                                                     <hr></hr>
                                                     <div class="hp_profile">
-                                                        <p><i class="fa fa-user" style={{marginRight:"15px"}}></i>Dharun Narayanan</p>
-                                                        <p><i class="fa fa-credit-card" style={{marginRight:"15px"}}></i>CB.EN.U4CSE19318</p>
-                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>B.Tech CSE</p>                                                       
+                                                        <p><i class="fa fa-user" style={{marginRight:"15px"}}></i>{fname} {lname}</p>
+                                                        <p><i class="fa fa-credit-card" style={{marginRight:"15px"}}></i>{userEmail.substring(0,16).toUpperCase()}</p>
+                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>B.Tech {department}</p>                                                       
                                                     </div>                                                    
                                                 </div>
                                             </div>
@@ -103,7 +140,28 @@ function Homepage(){
                                                     <div class="hp_profile">
                                                         <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>Book1</p>     
                                                         <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>Book2</p>     
-                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>Book3</p>                                                       
+                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>Book3</p> 
+                                                        <Popup trigger={<button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-code-fork"></span> Borrow</button>} 
+                                                            position="center center">
+                                                            <div class="pop_card box">
+                                                                <div class="login-container1 animated flipInX main-heading">
+                                                                    <h3>Borrow Details</h3>
+                                                                    <form class="margin-t">
+                                                                        <div class="form-group inputContainer">  
+                                                                            <i class="fa fa-book icon"> </i>                                              
+                                                                            <input type="text" class="form-control formc" placeholder="Book ID"  required></input>
+                                                                        </div>
+                                                                        <div class="form-group inputContainer">
+                                                                            <i class="fa fa-user icon"> </i>
+                                                                            <input type="text" id="myInput" class="form-control formc" placeholder="User ID" required></input>
+                                                                        </div>
+                                                                        <div class="text-c">
+                                                                            <button type="button" class="btn navbar-btn loginp1 margin-b"><span class="fa fa-code-fork"></span> Borrow</button>                                                                                   
+                                                                        </div>                                            
+                                                                    </form>
+                                                                </div>                                                            
+                                                            </div>
+                                                </Popup>                                                       
                                                     </div>                                                    
                                                 </div>
                                             </div>                                                    
@@ -145,7 +203,7 @@ function Homepage(){
                                                 <hr class="w3-clear"></hr>
                                                 <p>Despite its title, “Asymmetry” comprises two seemingly unrelated sections of equal length, appended by a slim and quietly shocking coda. Halliday’s prose is clean and lean, almost reportorial in the style of W. G. Sebald, and like the murmurings of a shy person at a cocktail party, often comic only in single clauses. It’s a first novel that reads like the work of an author who has published many books over many years.</p>
                                                 <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-thumbs-up"></i>  Like</button>
-                                                <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-comment"></i>  Comment</button>                                                
+                                                <button class="btn navbar-btn guestp margin-b" ><i class="fa fa-comment"></i>  Comment</button>                                                
                                             </div>
 
                                             <div class="w3-container w3-card homepage_bg w3-round w3-margin"><br></br>
@@ -157,7 +215,7 @@ function Homepage(){
 
                                                 <p>Doane creates a relatable protagonist in The Narrator, whose personal growth doesn’t erase his faults. His willingness to hit the road with few resources is admirable, and he’s prescient enough to recognize the jealousy of those who cannot or will not take the leap. His encounters with new foods, places, and people broaden his horizons. Yet his immaturity and selfishness persist. He tells Rosie she’s been a good mother to him but chooses to ignore the continuing concern from his own parents as he effectively disappears from his old life.</p>
                                                 <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-thumbs-up"></i>  Like</button>
-                                                <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-comment"></i>  Comment</button> 
+                                                <button class="btn navbar-btn guestp margin-b" ><i class="fa fa-comment"></i>  Comment</button> 
                                             </div> 
 
                                             <div class="w3-container w3-card homepage_bg w3-round w3-margin"><br></br>
@@ -167,7 +225,7 @@ function Homepage(){
                                                 <hr class="w3-clear"></hr>
                                                 <p> The hype around this book has been unquestionable and, admittedly, that made me both eager to get my hands on it and terrified to read it. I mean, what if I was to be the one person that didn’t love it as much as others? (That seems silly now because of how truly mesmerizing THUG was in the most heartbreakingly realistic way.) However, with the relevancy of its summary in regards to the unjust predicaments POC currently face in the US, I knew this one was a must-read, so I was ready to set my fears aside and dive in. That said, I had an altogether more personal, ulterior motive for wanting to read this book. </p>
                                                 <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-thumbs-up"></i>  Like</button>
-                                                <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-comment"></i>  Comment</button> 
+                                                <button class="btn navbar-btn guestp     margin-b" ><i class="fa fa-comment"></i>  Comment</button> 
                                             </div> 
                                         </div>
 
@@ -187,10 +245,10 @@ function Homepage(){
                                             <hr></hr>   
                                             <div class="hp_profile">
                                                 <p>Amount: ₹0</p>  
-                                                <Popup trigger={<button class="btn navbar-btn guestp margin-b"><span class="fa fa-rupee"></span> Pay Fine</button>} 
+                                                <Popup trigger={<button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-rupee"></span> Pay Fine</button>} 
                                                             position="center center">
-                                                            <div class="login_card">
-                                                                <div class="login-container animated flipInX main-heading">
+                                                            <div class="pop_card box">
+                                                                <div class="login-container1 animated flipInX main-heading">
                                                                     <h3>Select Payment Mode</h3>
                                                                     <form class="margin-t">
                                                                         <div>
@@ -210,7 +268,7 @@ function Homepage(){
                                                                             </ul>                                                                        
                                                                         </div>
                                                                         <div class="text-c">
-                                                                            <button type="button" class="btn navbar-btn loginp margin-b">Proceed To Pay</button>                                                                                   
+                                                                            <button type="button" class="btn navbar-btn loginp1 margin-b">Proceed To Pay</button>                                                                                   
                                                                         </div>                                            
                                                                     </form>
                                                                 </div>                                                            

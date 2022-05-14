@@ -117,7 +117,7 @@ function BookModify(){
                                                 </form>
                                                 <div class="text-center text-md-left" style={{padding:"2rem"}}>
                                                     <button class="btn navbar-btn send margin-b" onClick={modifyBook}><span class="fa fa-save"></span> Modify</button><br></br>
-                                                    <Link to="/book"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-arrow-left"></span> Back</button> </Link>
+                                                    <Link to="/book"><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-arrow-left"></span> Back</button> </Link>
                                                 </div>
                                             </div> 
                                         </div>

@@ -5,6 +5,10 @@ import Navbar from './navbar';
 import  { Link } from 'react-router-dom'
 import app from '../firebase';
 import { getDatabase, ref, set } from "firebase/database";
+import {
+    getAuth
+} from "firebase/auth"
+
 
 
 function Book(){
@@ -17,6 +21,14 @@ function Book(){
     const [numCopies, setNumCopies] = useState(0)
     const [genre, setgenre] = useState("")
     const [location, setlocation] = useState("")
+    const [userEmail, setuserEmail] = useState("");
+    const auth = getAuth(app);
+    
+
+    const  constructor = () =>{
+        const user = auth.currentUser;
+        setuserEmail(user.email);
+    };
 
     useEffect(() => {
       window.addEventListener("scroll", () => {
@@ -54,7 +66,7 @@ function Book(){
     };
     return (
         <div>
-                <div  id="colorlib-page">
+                <div  id="colorlib-page" onLoad={constructor}>
                     <div id="container-wrap">
                         <div class="hero-gradient1">
                             <div class="hero-fadeout-gradient1">
@@ -137,9 +149,9 @@ function Book(){
                                                 </form>
                                                 <div class="text-center text-md-left" style={{padding:"2rem"}}>
                                                     <button class="btn navbar-btn send margin-b" onClick={addBook}><span class="fa fa-save"></span> Save</button><br></br>
-                                                    <Link to="/book_modify"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-edit"></span> Modification</button></Link>                                                        
-                                                    <Link to="/book_delete"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-step-backward"></span> Deletion</button></Link> <br></br>
-                                                    <Link to="/ahomepage"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-arrow-left"></span> Back</button> </Link>
+                                                    <Link to="/book_modify"><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-edit"></span> Modification</button></Link>                                                        
+                                                    <Link to="/book_delete"><button class="btn navbar-btn guestp2 margin-b"><span class="fa fa-step-backward"></span> Deletion</button></Link> <br></br>
+                                                    <Link to={`/ahomepage/${userEmail}`}><button class="btn navbar-btn guestp margin-b"><span class="fa fa-arrow-left"></span> Back</button> </Link>
                                                 </div>
                                             </div> 
                                         </div>

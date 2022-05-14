@@ -9,11 +9,8 @@ import splash_bg from '../images/Library.gif'
 import app from '../firebase'
 import Popup from 'reactjs-popup';
 import {
-    GoogleAuthProvider,
     getAuth,
-    signInWithPopup,
     signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
     sendPasswordResetEmail,
     signOut,
 } from "firebase/auth"
@@ -170,8 +167,8 @@ function Login(){
                                                             </div>
                                                         </Popup>
                                                       </div>                                                  
-                                                      <Link to="/alogin"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-cog"></span> Admin</button> </Link>
-                                                      <Link to="/ghomepage"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-user"></span> Guest</button></Link>                                                                                     
+                                                      <Link to="/alogin"><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-cog"></span> Admin</button> </Link>
+                                                      <Link to="/ghomepage"><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-user"></span> Guest</button></Link>                                                                                     
                                               </div> 
                                       </div>  
                                   </div>                                                    
@@ -218,8 +215,8 @@ function Login(){
                                                             </div>
                                                         </Popup>
                                                       </div>                                                  
-                                                      <Link to="/alogin"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-cog"></span> Admin</button> </Link>
-                                                      <Link to="/homepage"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-user"></span> Guest</button></Link>                                                                                     
+                                                      <Link to="/alogin"><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-cog"></span> Admin</button> </Link>
+                                                      <Link to="/homepage"><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-user"></span> Guest</button></Link>                                                                                     
                                               </div>
                                       </div>  
                                   </div>                                                    

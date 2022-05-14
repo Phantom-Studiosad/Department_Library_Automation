@@ -5,10 +5,47 @@ import Foot from './footer';
 import { Link } from "react-router-dom";
 import splash_bg from '../images/Library.gif'
 import Avatar from "../images/avatar.png"
+import Popup from 'reactjs-popup';
+import app from '../firebase';
+import { getDatabase, ref, child, get } from "firebase/database";
+import {
+    GoogleAuthProvider,
+    getAuth,
+    signInWithPopup,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    sendPasswordResetEmail,
+    signOut,
+} from "firebase/auth"
 
 
 function AHomepage(){
+    const auth = getAuth(app);
     const [showButton, setShowButton] = useState(false);
+    const [userEmail, setuserEmail] = useState("");
+    const [fname, setFname] = useState("");
+    const [lname, setLname] = useState("");
+    const [role, setRole] = useState("");
+
+   const  constructor = () =>{
+        const user = auth.currentUser;
+        const roll = userEmail.substring(3,10);
+        if (user !== null) {
+            setuserEmail(user.email);
+            const dbRef = ref(getDatabase(app));
+            get(child(dbRef, `Admin/${roll}`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                setFname(snapshot.val().firstName.toUpperCase());
+                setLname(snapshot.val().lastName.toUpperCase());
+                setRole(snapshot.val().role);
+            } else {
+                console.log("No data available");
+            }
+            }).catch((error) => {
+            console.error(error);
+            });
+        };
+    };
     useEffect(() => {
       window.addEventListener("scroll", () => {
         if (window.pageYOffset > 100) {
@@ -34,6 +71,11 @@ function AHomepage(){
         behavior: 'smooth' // for smoothly scrolling
       });
     };
+
+    const logout = async () => {
+        await signOut(auth);
+        window.alert("Admin logged out successfully!")
+      };
     return (
         <div>
           {
@@ -48,7 +90,7 @@ function AHomepage(){
                 </div>
             </div>
             :
-            <div  id="colorlib-page">
+            <div  id="colorlib-page" onLoad={constructor}>
               <div id="container-wrap">
                     <div class="hero-gradient1">
                         <div class="hero-fadeout-gradient1">
@@ -70,6 +112,7 @@ function AHomepage(){
                                                 <li><Link><b><span class="fa fa-envelope" title='Messages'></span></b></Link></li>
                                                 <li><Link><b><span class="fa fa-bell" title='Notifications'></span></b></Link></li>
                                                 <li><Link to="/profilepage"><b><span class="fa fa-user" title='Profile'></span></b></Link></li>
+                                                <li><Link to="/alogin" style={{margin:"0px",padding:"0px"}}><button class="btn navbar-btn login" onClick={logout}><span class="fa fa-sign-out"></span> LogOut</button></Link></li>
                                             </ul>      
                                         </div>
                                     </div>
@@ -85,80 +128,27 @@ function AHomepage(){
                                                 <div class="w3-container">
                                                     <h4 class="w3-center">My Profile</h4>
                                                     <p class="w3-center"><img src={Avatar} class="w3-circle" alt="Avatar" style={{height:"106px",width:"106px"}}></img></p>
-                                                    <p class="w3-center"></p>
                                                     <hr></hr>
                                                     <div class="hp_profile">
-                                                        <p><i class="fa fa-user" style={{marginRight:"15px"}}></i>Admin </p>
-                                                        <p><i class="fa fa-home" style={{marginRight:"15px"}}></i>London, UK</p>
-                                                        <p><i class="fa fa-calendar" style={{marginRight:"15px"}}></i>April 1, 1988</p>
+                                                        <p><i class="fa fa-user" style={{marginRight:"15px"}}></i>{fname} {lname}</p>
+                                                        <p><i class="fa fa-credit-card" style={{marginRight:"15px"}}></i>{userEmail.substring(0,10).toUpperCase()}</p>
+                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>{role}</p>                                                       
                                                     </div>                                                    
                                                 </div>
                                             </div>
                                             <br></br>
 
-                                            <div class="w3-card w3-round homepage_bg">
-                                                <div>
-                                                <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My Groups</button>
-                                                <div id="Demo1" class="w3-hide w3-container">
-                                                    <p>Some text..</p>
-                                                </div>
-                                                <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> My Events</button>
-                                                <div id="Demo2" class="w3-hide w3-container">
-                                                    <p>Some other text..</p>
-                                                </div>
-                                                <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i> My Photos</button>
-                                                <div id="Demo3" class="w3-hide w3-container">
-                                                <div class="w3-row-padding">
-                                                <br></br>
-                                                <div class="w3-half">
-
-                                                </div>
-                                                <div class="w3-half">
-                                                    
-                                                </div>
-                                                <div class="w3-half">
-                                                
-                                                </div>
-                                                <div class="w3-half">
-                                                    
-                                                </div>
-                                                <div class="w3-half">
-                                                    
-                                                </div>
-                                                <div class="w3-half">
-                                                
-                                                </div>
-                                                </div>
-                                                </div>
-                                                </div>      
-                                            </div>
-                                            <br></br>
-
-                                            <div class="w3-card w3-round homepage_bg w3-hide-small">
+                                            <div class="w3-card w3-round homepage_bg" style={{textAlign:"center"}}>
                                                 <div class="w3-container">
-                                                    <p>Interests</p>
-                                                    <p>
-                                                        <span class="w3-tag w3-small w3-theme-d5">News</span>
-                                                        <span class="w3-tag w3-small w3-theme-d4">W3Schools</span>
-                                                        <span class="w3-tag w3-small w3-theme-d3">Labels</span>
-                                                        <span class="w3-tag w3-small w3-theme-d2">Games</span>
-                                                        <span class="w3-tag w3-small w3-theme-d1">Friends</span>
-                                                        <span class="w3-tag w3-small w3-theme">Games</span>
-                                                        <span class="w3-tag w3-small w3-theme-l1">Friends</span>
-                                                        <span class="w3-tag w3-small w3-theme-l2">Food</span>
-                                                        <span class="w3-tag w3-small w3-theme-l3">Design</span>
-                                                        <span class="w3-tag w3-small w3-theme-l4">Art</span>
-                                                        <span class="w3-tag w3-small w3-theme-l5">Photos</span>
-                                                    </p>
+                                                    <h4 class="w3-center">Functionality</h4>
+                                                    <hr></hr>
+                                                    <div class="text-c">
+                                                        <Link to="/book"><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-book"></span> Book</button></Link>
+                                                        <Link to="/user"><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-user"></span> User</button></Link>
+                                                    </div>                                                                                                       
                                                 </div>
-                                            </div>
+                                            </div>                                                    
                                             <br></br>
-
-                                            <div class="w3-container homepage_bg  w3-round w3-hide-small">
-                                                <p><strong>Hey!</strong></p>
-                                                <p>People are looking at your profile. Find out who.</p>
-                                            </div>
-
                                         </div>
 
                                         <div class="w3-col m6">
@@ -178,9 +168,9 @@ function AHomepage(){
                                                 <span class="w3-right w3-opacity">1 min</span>
                                                 <h4>John Doe</h4><br></br>
                                                 <hr class="w3-clear"></hr>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                                <p>Despite its title, “Asymmetry” comprises two seemingly unrelated sections of equal length, appended by a slim and quietly shocking coda. Halliday’s prose is clean and lean, almost reportorial in the style of W. G. Sebald, and like the murmurings of a shy person at a cocktail party, often comic only in single clauses. It’s a first novel that reads like the work of an author who has published many books over many years.</p>
                                                 <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-thumbs-up"></i>  Like</button>
-                                                <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-comment"></i>  Comment</button>                                                
+                                                <button class="btn navbar-btn guestp margin-b" ><i class="fa fa-comment"></i>  Comment</button>                                                
                                             </div>
 
                                             <div class="w3-container w3-card homepage_bg w3-round w3-margin"><br></br>
@@ -190,9 +180,9 @@ function AHomepage(){
                                                 <hr class="w3-clear"></hr>
                                                 <p>Have you seen this?</p>
 
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                                <p>Doane creates a relatable protagonist in The Narrator, whose personal growth doesn’t erase his faults. His willingness to hit the road with few resources is admirable, and he’s prescient enough to recognize the jealousy of those who cannot or will not take the leap. His encounters with new foods, places, and people broaden his horizons. Yet his immaturity and selfishness persist. He tells Rosie she’s been a good mother to him but chooses to ignore the continuing concern from his own parents as he effectively disappears from his old life.</p>
                                                 <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-thumbs-up"></i>  Like</button>
-                                                <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-comment"></i>  Comment</button> 
+                                                <button class="btn navbar-btn guestp margin-b" ><i class="fa fa-comment"></i>  Comment</button> 
                                             </div> 
 
                                             <div class="w3-container w3-card homepage_bg w3-round w3-margin"><br></br>
@@ -200,41 +190,70 @@ function AHomepage(){
                                                 <span class="w3-right w3-opacity">16 min</span>
                                                 <h4>Jane Doe</h4><br></br>
                                                 <hr class="w3-clear"></hr>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                                <p> The hype around this book has been unquestionable and, admittedly, that made me both eager to get my hands on it and terrified to read it. I mean, what if I was to be the one person that didn’t love it as much as others? (That seems silly now because of how truly mesmerizing THUG was in the most heartbreakingly realistic way.) However, with the relevancy of its summary in regards to the unjust predicaments POC currently face in the US, I knew this one was a must-read, so I was ready to set my fears aside and dive in. That said, I had an altogether more personal, ulterior motive for wanting to read this book. </p>
                                                 <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-thumbs-up"></i>  Like</button>
-                                                <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-comment"></i>  Comment</button> 
+                                                <button class="btn navbar-btn guestp     margin-b" ><i class="fa fa-comment"></i>  Comment</button> 
                                             </div> 
                                         </div>
 
                                         <div class="w3-col m3">
-                                            <div class="w3-card w3-round homepage_bg w3-center">
-                                                <div class="w3-container">
-                                                <p>Upcoming Events:</p>
-                                                
-                                                <p><strong>Holiday</strong></p>
-                                                <p>Friday 15:00</p>
-                                                <p><button class="w3-button w3-block w3-theme-l4">Info</button></p>
-                                                </div>
+                                            <div class="w3-card w3-round homepage_bg" style={{textAlign:"center"}}>
+                                            <h4 class="w3-center">Upcoming Due</h4>
+                                            <hr></hr>
+                                                <div class="hp_profile">
+                                                    <p><i class="fa fa-book" style={{marginRight:"10px"}}></i>Book1   2Days</p>     
+                                                    <p><i class="fa fa-book" style={{marginRight:"10px"}}></i>Book2   1Day</p>                                                           
+                                                </div> 
                                             </div>
                                             <br></br>
                                             
-                                            <div class="w3-card w3-round homepage_bg w3-padding-16 w3-center">
-                                                <p>ADS</p>
+                                            <div class="w3-card w3-round homepage_bg w3-padding-16 w3-center">                                                
+                                            <p>Fine Collected</p>
+                                            <hr></hr>   
+                                            <div class="hp_profile">
+                                                <p>Amount: ₹0</p>  
+                                                <Popup trigger={<button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-rupee"></span> Total Fine</button>} 
+                                                            position="center center">
+                                                            <div class="pop_card box">
+                                                                <div class="login-container1 animated flipInX main-heading">
+                                                                    <h3>Select Payment Mode</h3>
+                                                                    <form class="margin-t">
+                                                                        <div>
+                                                                            <ul class="list-unstyled mb-0">
+                                                                                <li>
+                                                                                    <input type="radio" id="developer" name="payment_method" value="HTML"></input>
+                                                                                    <label for="html"> Credit Card</label><br></br>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <input type="radio" id="developer" name="payment_method" value="HTML"></input>
+                                                                                    <label for="html"> Debit Card</label><br></br>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <input type="radio" id="librarian" name="payment_method" value="HTML"></input>
+                                                                                    <label for="html"> Upi</label><br></br>
+                                                                                </li>
+                                                                            </ul>                                                                        
+                                                                        </div>
+                                                                        <div class="text-c">
+                                                                            <button type="button" class="btn navbar-btn loginp1 margin-b">Proceed To Pay</button>                                                                                   
+                                                                        </div>                                            
+                                                                    </form>
+                                                                </div>                                                            
+                                                            </div>
+                                                </Popup>                                                        
+                                            </div>                                                  
                                             </div>
                                             <br></br>
                                             
-                                            <div class="w3-card w3-round homepage_bg w3-padding-32 w3-center">
+                                            <div class="w3-card w3-round homepage_bg w3-padding-6 w3-center">
+                                                <h4 class="w3-center">Bug Report</h4>
                                                 <p><i class="fa fa-bug w3-xxlarge"></i></p>
                                             </div>
                                             
                                         
                                             </div>
                                     </div>                        
-                            </div>   
-                            <div class="text-c">
-                                <Link to="/book"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-book"></span> Book</button></Link>
-                                <Link to="/user"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-user"></span> User</button></Link>
-                            </div>                                                                                                       
+                            </div>                                                                                                          
                   </div>                  
               </div>
               <Foot></Foot>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import PuffLoader from "react-spinners/PuffLoader";
+import  { Redirect, Link } from 'react-router-dom'
 import "../App.css"
 import Foot from './footer';
 import Navbar from './navbar';
-import  { Link } from 'react-router-dom'
 import splash_bg from '../images/Library.gif'
 import app from '../firebase'
 import Popup from 'reactjs-popup';
@@ -22,6 +22,7 @@ function ALogin(){
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [loginPin, setLoginPin] = useState("");
+  const [redirect, setRedirect] = useState(false);
   const auth = getAuth(app);
 
   const login = async () => {
@@ -29,8 +30,8 @@ function ALogin(){
           if(loginEmail.includes("cb.admin.amrita.edu")){
             if(loginPin.includes("admin123")){
               await signInWithEmailAndPassword(auth, loginEmail, loginPassword).then((u)=>{
-                window.alert('Admin Login successful')
-                console.log(u)
+                setRedirect(true);
+                console.log(u);
               }).catch((error) => {
               window.alert(error);
               }); 
@@ -87,7 +88,11 @@ function ALogin(){
         behavior: 'smooth' // for smoothly scrolling
       });
     };
-    return (
+    if(redirect){
+      return <Redirect to = {`/ahomepage/${loginEmail}`}></Redirect>
+    } 
+    else{
+      return (
         <div>
           {
             loading?
@@ -139,7 +144,6 @@ function ALogin(){
                                               </div>                                            
                                           </form>
                                           <div class="text-c">                                                                                                
-                                            <Link to="/ahomepage"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-user"></span> Homepage</button></Link> 
                                             <div>
                                                     <Popup trigger={<button class="fpwd"> Forgot password? </button>} 
                                                         position="center center">
@@ -159,7 +163,7 @@ function ALogin(){
                                                         </div>
                                                     </Popup>
                                                   </div>    
-                                            <Link to="/login"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-arrow-left"></span> Back</button> </Link>                                                                                       
+                                            <Link to="/login"><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-arrow-left"></span> Back</button> </Link>                                                                                       
                                           </div> 
                                   </div>  
                               </div>                                                    
@@ -176,6 +180,7 @@ function ALogin(){
           }
         </div>            
     )
+    } 
 }
 
 export default ALogin;
