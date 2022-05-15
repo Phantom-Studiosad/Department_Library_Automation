@@ -4,11 +4,86 @@ import "../App.css"
 import Foot from './footer';
 import { Link } from "react-router-dom";
 import splash_bg from '../images/Library.gif'
+import app from '../firebase';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 
 
 function PublishPaper(){
     const [showButton, setShowButton] = useState(false);
+    const [pdf , setPDF] = useState('');
+    const storage = getStorage();
+
+    const upload = ()=>{
+        if(pdf == null){
+            window.alert("Please select a file to upload");
+        }
+        else{
+            window.alert("Uploading...");
+            const mountainsRef = ref(storage, `${pdf.name}`);
+
+            // Create a reference to 'images/mountains.jpg'
+            const mountainImagesRef = ref(storage, `researchPapers/${pdf.name}`).then(()=>{window.alert("File uploaded successfully")}).catch(()=>{window.alert("File upload failed")});
+        }
+        storage.ref(`/researchPapers/${pdf.name}`).put(pdf)
+        .on("state_changed" , alert("success") , alert);
+    };
+
+    function uploadFile(){
+        const storage = getStorage();
+
+        // Create the file metadata
+        /** @type {any} */
+        const metadata = {
+        contentType: 'researchParers/pdf'
+        };
+
+        // Upload file and metadata to the object 'images/mountains.jpg'
+        const storageRef = ref(storage, 'researchPaper/' + pdf.name);
+        const uploadTask = uploadBytesResumable(storageRef, pdf, metadata);
+
+        // Listen for state changes, errors, and completion of the upload.
+        uploadTask.on('state_changed',
+        (snapshot) => {
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+            case 'paused':
+                console.log('Upload is paused');
+                break;
+            case 'running':
+                console.log('Upload is running');
+                break;
+            }
+        }, 
+        (error) => {
+            // A full list of error codes is available at
+            // https://firebase.google.com/docs/storage/web/handle-errors
+            switch (error.code) {
+            case 'storage/unauthorized':
+                // User doesn't have permission to access the object
+                break;
+            case 'storage/canceled':
+                // User canceled the upload
+                break;
+
+            // ...
+
+            case 'storage/unknown':
+                // Unknown error occurred, inspect error.serverResponse
+                break;
+            }
+        }, 
+        () => {
+            // Upload completed successfully, now we can get the download URL
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            });
+        }
+        );
+    };
+
     useEffect(() => {
       window.addEventListener("scroll", () => {
         if (window.pageYOffset > 100) {
@@ -96,7 +171,7 @@ function PublishPaper(){
                                                         <li id="confirm"><strong>upload</strong></li>
                                                     </ul> 
                                                     <fieldset>
-                                                        <div class="form-card">
+                                                        <div class="form-card" style={{marginTop:'20px'}}>
                                                             <div class="form-group" style={{fontSize:'20px'}}>
                                                                 <label class="form-control-label" for="title">Title</label>                           
                                                                 <input class="form-control" id="title" maxlength="255" minlength="1" name="title" required type="text" ></input>
@@ -114,7 +189,7 @@ function PublishPaper(){
                                                                     id="radio1"
                                                                     name="optradio"
                                                                     value="option1"
-                                                                    />Journal
+                                                                    ></input>Journal
                                                                 </label>
                                                                 </div>
                                                                 <div class="form-check-inline" style={{fontSize:'16px'}}>
@@ -125,7 +200,7 @@ function PublishPaper(){
                                                                     id="radio2"
                                                                     name="optradio"
                                                                     value="option2"
-                                                                    />Conference Paper
+                                                                    ></input>Conference Paper
                                                                 </label>
                                                                 </div>
                                                                 <div class="form-check-inline" style={{fontSize:'16px'}}>
@@ -136,7 +211,7 @@ function PublishPaper(){
                                                                     id="radio3"
                                                                     name="optradio"
                                                                     value="option3"
-                                                                    />Research Paper
+                                                                    ></input>Research Paper
                                                                 </label>
                                                                 </div>
                                                             </div>
@@ -177,7 +252,7 @@ function PublishPaper(){
                                                                     name="author"
                                                                     required
                                                                     type="text"
-                                                                />
+                                                                ></input>
                                                             </div>
                                                         </div>
                                                         <div class="form-card">
@@ -192,7 +267,7 @@ function PublishPaper(){
                                                                 name="publisher"
                                                                 required
                                                                 type="text"
-                                                                />
+                                                                ></input>
                                                             </div>
                                                 
                                                             <div class="form-group" style={{fontSize:'20px'}}>
@@ -205,7 +280,7 @@ function PublishPaper(){
                                                                 name="published_year"
                                                                 required
                                                                 type="number"
-                                                                />
+                                                                ></input>
                                                             </div>
                                                         </div> 
                                                         <div class="form-card">
@@ -221,15 +296,14 @@ function PublishPaper(){
                                                                 id="paper_file"
                                                                 name="paper_file"
                                                                 type="file"
-                                                                style={{backgroundColor:'transparent',border:'none'}}
-                                                                />
-                                                            </div>
-                                                
-                                                        </div>
-                                                        <button id="submit" type="submit" class="btn btn-success" style={{fontSize:'18px'}}>
+                                                                style={{backgroundColor:'transparent',border:'none'}} onChange={(e)=>{setPDF(e.target.files[0])}}
+                                                                ></input>
+                                                            </div>                                                
+                                                        </div>                                                                                                   
+                                                    </fieldset><br></br> 
+                                                    <button class="btn btn-success" style={{fontSize:'18px'}} onClick={uploadFile()}>
                                                                     <i class="fa fa-upload"></i> Publish Paper
-                                                        </button>                                                 
-                                                    </fieldset>
+                                                    </button>
                                                 </form>
                                             </div>
                                         </div>

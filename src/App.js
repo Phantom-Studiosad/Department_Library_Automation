@@ -21,6 +21,7 @@ import User from './components/user';
 import UserModify from './components/user_modify';
 import UserDelete from './components/user_delete';
 import Profilepage from './components/profilepage';
+import RProfilepage from './components/rprofilepage';
 
 
 class App extends Component {
@@ -53,6 +54,7 @@ class App extends Component {
           <Route exact path='/user_modify' component={UserModify}/>
           <Route exact path='/user_delete' component={UserDelete}/>
           <Route exact path='/profilepage' component={Profilepage}/>
+          <Route exact path='/rprofilepage' component={RProfilepage}/>
         </Switch>
       </Router>
     );

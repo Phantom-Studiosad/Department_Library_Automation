@@ -6,10 +6,42 @@ import { Link } from "react-router-dom";
 import splash_bg from '../images/Library.gif'
 import Avatar from "../images/avatar.png"
 import Popup from 'reactjs-popup';
+import app from '../firebase';
+import { getDatabase, ref, child, get } from "firebase/database";
+import {
+    getAuth,
+    signOut,
+} from "firebase/auth"
 
 
 function RHomepage(){
     const [showButton, setShowButton] = useState(false);
+    const auth = getAuth(app);
+    const [userEmail, setuserEmail] = useState("");
+    const [fname, setFname] = useState("");
+    const [lname, setLname] = useState("");
+    const [department, setDepartment] = useState("");
+
+    const  constructor = () =>{
+        const user = auth.currentUser;
+        const roll = userEmail.substring(8,16);
+        if (user !== null) {
+            setuserEmail(user.email);
+            const dbRef = ref(getDatabase(app));
+            get(child(dbRef, `Research/${roll}`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                setFname(snapshot.val().firstName.toUpperCase());
+                setLname(snapshot.val().lastName.toUpperCase());
+                setDepartment(snapshot.val().department.toUpperCase());
+            } else {
+                console.log("No data available");
+            }
+            }).catch((error) => {
+            console.error(error);
+            });
+        };
+    };
+
     useEffect(() => {
       window.addEventListener("scroll", () => {
         if (window.pageYOffset > 100) {
@@ -35,6 +67,10 @@ function RHomepage(){
         behavior: 'smooth' // for smoothly scrolling
       });
     };
+    const logout = async () => {
+        await signOut(auth);
+        window.alert("User logged out successfully!")
+      };
     return (
         <div>
           {
@@ -49,7 +85,7 @@ function RHomepage(){
                 </div>
             </div>
             :
-            <div  id="colorlib-page">
+            <div  id="colorlib-page" onLoad={constructor}>
               <div id="container-wrap">
                     <div class="hero-gradient1">
                         <div class="hero-fadeout-gradient1">
@@ -70,7 +106,8 @@ function RHomepage(){
                                                 <li><Link><b><span class="fa fa-globe" title='Blog'></span></b></Link></li>
                                                 <li><Link><b><span class="fa fa-envelope" title='Messages'></span></b></Link></li>
                                                 <li><Link><b><span class="fa fa-bell" title='Notifications'></span></b></Link></li>
-                                                <li><Link to="/profilepage"><b><span class="fa fa-user" title='Profile'></span></b></Link></li>
+                                                <li><Link to="/rprofilepage"><b><span class="fa fa-user" title='Profile'></span></b></Link></li>
+                                                <li><Link to="/login" style={{margin:"0px",padding:"0px"}}><button class="btn navbar-btn login" onClick={logout}><span class="fa fa-sign-out"></span> LogOut</button></Link></li>
                                             </ul>      
                                         </div>
                                     </div>
@@ -88,9 +125,9 @@ function RHomepage(){
                                                     <p class="w3-center"><img src={Avatar} class="w3-circle" alt="Avatar" style={{height:"106px",width:"106px"}}></img></p>
                                                     <hr></hr>
                                                     <div class="hp_profile">
-                                                        <p><i class="fa fa-user" style={{marginRight:"15px"}}></i>Ashwanth K</p>
-                                                        <p><i class="fa fa-credit-card" style={{marginRight:"15px"}}></i>CB.EN.U4CSE19305</p>
-                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>RScholar (CSE)</p>                                                       
+                                                        <p><i class="fa fa-user" style={{marginRight:"15px"}}></i>{fname} {lname}</p>
+                                                        <p><i class="fa fa-credit-card" style={{marginRight:"15px"}}></i>{userEmail.substring(0,16).toUpperCase()}</p>
+                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>{department}</p>                                                        
                                                     </div>                                                    
                                                 </div>
                                             </div>
