@@ -128,9 +128,9 @@ function RProfilepage(){
                                             <ul class="nav navbar-nav navbar-right">
                                                 <li><Link to="/opac"><b>OPAC</b></Link></li>
                                                 <li><Link><b><span class="fa fa-globe" title='Blog'></span></b></Link></li>
-                                                <li><Link><b><span class="fa fa-envelope" title='Messages'></span></b></Link></li>
                                                 <li><Link><b><span class="fa fa-bell" title='Notifications'></span></b></Link></li>
-                                                <li><Link to="/profilepage"><b><span class="fa fa-user" title='Profile'></span></b></Link></li>
+                                                <li><Link to="/rprofilepage"><b><span class="fa fa-user" title='Profile'></span></b></Link></li>
+                                                <Link to={`/rhomepage/${userEmail}`}><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-arrow-left"></span> Back</button></Link>
                                             </ul>      
                                         </div>
                                     </div>

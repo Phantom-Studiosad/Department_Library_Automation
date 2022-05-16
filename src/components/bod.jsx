@@ -29,8 +29,10 @@ export default class Bod extends Component {
                     </div>   
                     <div class="column">
                         <div class="card2">
+                            <Link to='/alogin'>
                             <img class="card_img" src={Img2} alt="Vector Image"></img>
                             <h2>Borrow/Return</h2>
+                            </Link>                            
                         </div>
                     </div> 
                     <div class="column">

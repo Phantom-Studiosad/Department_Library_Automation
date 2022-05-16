@@ -67,9 +67,8 @@ function GHomepage(){
                                             <ul class="nav navbar-nav navbar-right">
                                                 <li><Link to="/opac"><b>OPAC</b></Link></li>
                                                 <li><Link><b><span class="fa fa-globe" title='Blog'></span></b></Link></li>
-                                                <li><Link><b><span class="fa fa-envelope" title='Messages'></span></b></Link></li>
                                                 <li><Link><b><span class="fa fa-bell" title='Notifications'></span></b></Link></li>
-                                                <li><Link to="/profilepage"><b><span class="fa fa-user" title='Profile'></span></b></Link></li>
+                                                <Link to="/login"><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-arrow-left"></span> Back</button></Link>
                                             </ul>      
                                         </div>
                                     </div>
@@ -172,7 +171,7 @@ function GHomepage(){
                                             
                                             <div class="w3-card w3-round homepage_bg w3-padding-6 w3-center">
                                                 <h4 class="w3-center">Bug Report</h4>
-                                                <p><i class="fa fa-bug w3-xxlarge"></i></p>
+                                                <Link to="/contact"><p><i class="fa fa-bug w3-xxlarge"></i></p></Link>                                                
                                             </div>
                                             
                                         

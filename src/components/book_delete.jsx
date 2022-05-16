@@ -5,6 +5,7 @@ import Navbar from './navbar';
 import  { Link } from 'react-router-dom'
 import { getDatabase, ref, child,remove,get } from "firebase/database";
 import app from '../firebase';
+import Img1 from "../images/books.png"
 
 function BookDelete(){
     const [showButton, setShowButton] = useState(false);
@@ -60,7 +61,7 @@ function BookDelete(){
                                 <Navbar/>  
                                 <div class="container">
                                     <div>
-                                         
+                                        <img class="im1" src={Img1} alt="Vector Image"></img>                                           
                                         <div class="heading1">
                                         <h1>Book</h1>                
                                         </div>   

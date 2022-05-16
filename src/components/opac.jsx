@@ -50,7 +50,7 @@ function Opac(){
             </div>
             :
             <div  id="colorlib-page">
-                <div id="container-wrap">
+                <div id="container-wrap" style={{minHeight:'80vh'}}>
                     <div class="hero-gradient1">
                         <div class="hero-fadeout-gradient1">
                             <Navbar/>                                

@@ -128,9 +128,9 @@ function Profilepage(){
                                             <ul class="nav navbar-nav navbar-right">
                                                 <li><Link to="/opac"><b>OPAC</b></Link></li>
                                                 <li><Link><b><span class="fa fa-globe" title='Blog'></span></b></Link></li>
-                                                <li><Link><b><span class="fa fa-envelope" title='Messages'></span></b></Link></li>
                                                 <li><Link><b><span class="fa fa-bell" title='Notifications'></span></b></Link></li>
                                                 <li><Link to="/profilepage"><b><span class="fa fa-user" title='Profile'></span></b></Link></li>
+                                                <Link to={`/homepage/${userEmail}`}><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-arrow-left"></span> Back</button></Link>
                                             </ul>      
                                         </div>
                                     </div>
@@ -261,24 +261,21 @@ function Profilepage(){
                                     <div class="col-sm-6 mb-3">
                                         <div class="profile_card h-100">
                                             <div class="profile_card-body">
-                                                <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
+                                                <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i> Project Status</h6>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <div class="profile_card h-100">
                                             <div class="profile_card-body">
-                                                <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
+                                                <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i> Project Status</h6>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>                                
                             </div> 
-                    </div> 
-                    <div class="text-center text-md-left" style={{padding:"0rem"}}>
-                        <Link to={`/homepage/${userEmail}`}><button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-arrow-left"></span> Back</button></Link>
-                    </div>                              
+                    </div>                             
               </div>
               <Foot></Foot>
               {showButton && (

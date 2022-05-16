@@ -5,6 +5,7 @@ import Navbar from './navbar';
 import  { Link } from 'react-router-dom'
 import { getDatabase, ref, child, get,set } from "firebase/database";
 import app from '../firebase';
+import Img1 from "../images/users.png"
 
 function UserModify(){
     const [showButton, setShowButton] = useState(false);
@@ -68,7 +69,7 @@ function UserModify(){
                                 <Navbar/>  
                                 <div class="container">
                                     <div>
-                                         
+                                        <img class="im1" src={Img1} alt="Vector Image"></img>                                           
                                         <div class="heading1">
                                         <h1>User</h1>                
                                         </div>   

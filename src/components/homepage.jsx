@@ -7,12 +7,11 @@ import splash_bg from '../images/Library.gif'
 import Avatar from "../images/avatar.png"
 import Popup from 'reactjs-popup';
 import app from '../firebase';
-import { getDatabase, ref, child, get } from "firebase/database";
+import { getDatabase, ref, child, get, set } from "firebase/database";
 import {
     getAuth,
     signOut,
 } from "firebase/auth"
-import useRazorpay from "react-razorpay";
 
 
 function Homepage(){
@@ -22,6 +21,10 @@ function Homepage(){
     const [fname, setFname] = useState("");
     const [lname, setLname] = useState("");
     const [department, setDepartment] = useState("");
+    const [blog ,setBlog] = useState("");
+    const [roll, setRoll] = useState("");
+    const [bstate, setBstate] = useState({});
+    const [bookNames, setBookNames] = useState(['']);
 
     const makePayment = async () => {
         console.log("here...");
@@ -80,7 +83,7 @@ function Homepage(){
 
    const  constructor = () =>{
         const user = auth.currentUser;
-        const roll = userEmail.substring(8,16);
+        setRoll(userEmail.substring(8,16));
         if (user !== null) {
             setuserEmail(user.email);
             const dbRef = ref(getDatabase(app));
@@ -95,8 +98,22 @@ function Homepage(){
             }).catch((error) => {
             console.error(error);
             });
+            //Borrow Details
+            get(child(dbRef, `Borrow/${roll}`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                snapshot.forEach((childSnapshot) => {
+                    setBookNames(bookNames.concat(childSnapshot.val().bookName));
+                });
+            } else {
+                console.log("No borrow data available");
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
         };
+        console.log(bookNames);
     };
+
     useEffect(() => {
       window.addEventListener("scroll", () => {
         if (window.pageYOffset > 100) {
@@ -127,6 +144,52 @@ function Homepage(){
         await signOut(auth);
         window.alert("User logged out successfully!")
       };
+    
+      function bpost(){
+        const db = getDatabase(app);
+        set(ref(db, 'Blog/' + roll),{
+            user : roll,
+            content: blog,
+        }).then(window.alert('Blog Posted!')).catch((e) => {console.log(e)});
+    }
+    function bcontent(){
+        const dbRef = ref(getDatabase(app));
+        
+        get(child(dbRef, "Blog")).then((snapshot) => setBstate(snapshot.val()))
+        .catch((error) => {console.log(error)});
+        return Object.keys(bstate).map((key) => {
+                return(
+                    <div class="w3-container w3-card homepage_bg w3-round w3-margin"><br></br>
+                    <span class="w3-right w3-opacity">16 min</span>
+                    <h4>{bstate[key].user}</h4><br></br>
+                    <hr class="w3-clear"></hr>
+                    <p> {bstate[key].content}</p>
+                    <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-thumbs-up"></i>  Like</button>
+                    <button class="btn navbar-btn guestp     margin-b" ><i class="fa fa-comment"></i>  Comment</button> 
+                    </div> 
+                )
+            })
+        
+        /*return Object.keys(this.state.qdata).map((obj) => {
+            
+                return (
+                    <div style={{color:"red",marginLeft:"18%"}}>
+                    <table>
+                        <tr>
+                            <td>{this.state.qdata[obj].Room_no} </td>
+                            <td>{this.state.qdata[obj].Exam_id}</td>
+                            <td>{this.state.qdata[obj].Course_id}</td>
+                            <td>{this.state.qdata[obj].Ss_id} - 
+                            {this.state.qdata[obj].Es_id}</td>
+                            <td>{this.state.qdata[obj].Date}</td>
+                            <td>{this.state.qdata[obj].time}</td>
+                            <td>{this.state.qdata[obj].duration}</td>
+                        </tr>
+                    </table>  
+                    </div>
+                )       
+        })*/
+    }
     return (
         <div>
           {
@@ -160,7 +223,6 @@ function Homepage(){
                                             <ul class="nav navbar-nav navbar-right">
                                                 <li><Link to="/opac"><b>OPAC</b></Link></li>
                                                 <li><Link><b><span class="fa fa-globe" title='Blog'></span></b></Link></li>
-                                                <li><Link><b><span class="fa fa-envelope" title='Messages'></span></b></Link></li>
                                                 <li><Link><b><span class="fa fa-bell" title='Notifications'></span></b></Link></li>
                                                 <li><Link to="/profilepage"><b><span class="fa fa-user" title='Profile'></span></b></Link></li>
                                                 <li><Link to="/login" style={{margin:"0px",padding:"0px"}}><button class="btn navbar-btn login" onClick={logout}><span class="fa fa-sign-out"></span> LogOut</button></Link></li>
@@ -194,30 +256,9 @@ function Homepage(){
                                                     <h4 class="w3-center">Borrowed Books</h4>
                                                     <hr></hr>
                                                     <div class="hp_profile">
-                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>Book1</p>     
-                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>Book2</p>     
-                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>Book3</p> 
-                                                        <Popup trigger={<button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-code-fork"></span> Borrow</button>} 
-                                                            position="center center">
-                                                            <div class="pop_card box">
-                                                                <div class="login-container1 animated flipInX main-heading">
-                                                                    <h3>Borrow Details</h3>
-                                                                    <form class="margin-t">
-                                                                        <div class="form-group inputContainer">  
-                                                                            <i class="fa fa-book icon"> </i>                                              
-                                                                            <input type="text" class="form-control formc" placeholder="Book ID"  required></input>
-                                                                        </div>
-                                                                        <div class="form-group inputContainer">
-                                                                            <i class="fa fa-user icon"> </i>
-                                                                            <input type="text" id="myInput" class="form-control formc" placeholder="User ID" required></input>
-                                                                        </div>
-                                                                        <div class="text-c">
-                                                                            <button type="button" class="btn navbar-btn loginp1 margin-b"><span class="fa fa-code-fork"></span> Borrow</button>                                                                                   
-                                                                        </div>                                            
-                                                                    </form>
-                                                                </div>                                                            
-                                                            </div>
-                                                </Popup>                                                       
+                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>{bookNames[1]}</p>     
+                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>{bookNames[2]}</p>     
+                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>{bookNames[3]}</p>                                                       
                                                     </div>                                                    
                                                 </div>
                                             </div>                                                    
@@ -246,43 +287,15 @@ function Homepage(){
                                                 <div class="w3-card w3-round homepage_bg">
                                                     <div class="w3-container w3-padding">
                                                     <h6 class="w3-opacity">Blog post</h6>
-                                                    <p contenteditable="true" class="w3-border w3-padding">Status: Feeling Blue</p>
-                                                    <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-pencil"></i>  Post</button> 
+                                                    <p contenteditable="true" class="w3-border w3-padding"><input type="text" onChange={(event) => { setBlog(event.target.value); }} placeholder="Status: Feeling Blue" style={{backgroundColor:"#121b23", width:"45rem",border:"0px"}}></input></p>
+                                                    <button class="btn navbar-btn loginp margin-b" onClick = {bpost}><i class="fa fa-pencil"></i>  Post</button> 
                                                     </div>
                                                 </div>
                                                 </div>
                                             </div>
-
-                                            <div class="w3-container w3-card homepage_bg w3-round w3-margin"><br></br>
-                                                <span class="w3-right w3-opacity">1 min</span>
-                                                <h4>John Doe</h4><br></br>
-                                                <hr class="w3-clear"></hr>
-                                                <p>Despite its title, “Asymmetry” comprises two seemingly unrelated sections of equal length, appended by a slim and quietly shocking coda. Halliday’s prose is clean and lean, almost reportorial in the style of W. G. Sebald, and like the murmurings of a shy person at a cocktail party, often comic only in single clauses. It’s a first novel that reads like the work of an author who has published many books over many years.</p>
-                                                <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-thumbs-up"></i>  Like</button>
-                                                <button class="btn navbar-btn guestp margin-b" ><i class="fa fa-comment"></i>  Comment</button>                                                
-                                            </div>
-
-                                            <div class="w3-container w3-card homepage_bg w3-round w3-margin"><br></br>
-                
-                                                <span class="w3-right w3-opacity">32 min</span>
-                                                <h4>Angie Jane</h4><br></br>
-                                                <hr class="w3-clear"></hr>
-                                                <p>Have you seen this?</p>
-
-                                                <p>Doane creates a relatable protagonist in The Narrator, whose personal growth doesn’t erase his faults. His willingness to hit the road with few resources is admirable, and he’s prescient enough to recognize the jealousy of those who cannot or will not take the leap. His encounters with new foods, places, and people broaden his horizons. Yet his immaturity and selfishness persist. He tells Rosie she’s been a good mother to him but chooses to ignore the continuing concern from his own parents as he effectively disappears from his old life.</p>
-                                                <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-thumbs-up"></i>  Like</button>
-                                                <button class="btn navbar-btn guestp margin-b" ><i class="fa fa-comment"></i>  Comment</button> 
-                                            </div> 
-
-                                            <div class="w3-container w3-card homepage_bg w3-round w3-margin"><br></br>
-                
-                                                <span class="w3-right w3-opacity">16 min</span>
-                                                <h4>Jane Doe</h4><br></br>
-                                                <hr class="w3-clear"></hr>
-                                                <p> The hype around this book has been unquestionable and, admittedly, that made me both eager to get my hands on it and terrified to read it. I mean, what if I was to be the one person that didn’t love it as much as others? (That seems silly now because of how truly mesmerizing THUG was in the most heartbreakingly realistic way.) However, with the relevancy of its summary in regards to the unjust predicaments POC currently face in the US, I knew this one was a must-read, so I was ready to set my fears aside and dive in. That said, I had an altogether more personal, ulterior motive for wanting to read this book. </p>
-                                                <button class="btn navbar-btn loginp margin-b" ><i class="fa fa-thumbs-up"></i>  Like</button>
-                                                <button class="btn navbar-btn guestp     margin-b" ><i class="fa fa-comment"></i>  Comment</button> 
-                                            </div> 
+                                            {
+                                                bcontent()
+                                            }    
                                         </div>
 
                                         <div class="w3-col m3">
@@ -336,7 +349,7 @@ function Homepage(){
                                             
                                             <div class="w3-card w3-round homepage_bg w3-padding-6 w3-center">
                                                 <h4 class="w3-center">Bug Report</h4>
-                                                <p><i class="fa fa-bug w3-xxlarge"></i></p>
+                                                <Link to="/contact"><p><i class="fa fa-bug w3-xxlarge"></i></p></Link>
                                             </div>
                                             
                                         

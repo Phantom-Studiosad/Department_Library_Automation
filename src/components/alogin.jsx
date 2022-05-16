@@ -8,11 +8,8 @@ import splash_bg from '../images/Library.gif'
 import app from '../firebase'
 import Popup from 'reactjs-popup';
 import {
-    GoogleAuthProvider,
     getAuth,
-    signInWithPopup,
     signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
     sendPasswordResetEmail,
     signOut,
 } from "firebase/auth"

@@ -9,6 +9,7 @@ import {
     getAuth,
     createUserWithEmailAndPassword,
 } from "firebase/auth"
+import Img1 from "../images/users.png"
 
 function User(){
     const [showButton, setShowButton] = useState(false);
@@ -80,7 +81,7 @@ function User(){
                                 <Navbar/>  
                                 <div class="container">
                                     <div>
-                                         
+                                        <img class="im1" src={Img1} alt="Vector Image"></img>                                           
                                         <div class="heading1">
                                         <h1>User</h1>                
                                         </div>   

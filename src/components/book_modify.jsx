@@ -5,6 +5,7 @@ import Navbar from './navbar';
 import  { Link } from 'react-router-dom'
 import app from '../firebase';
 import { getDatabase, ref, child, get,set } from "firebase/database";
+import Img1 from "../images/books.png"
 
 
 function BookModify(){
@@ -68,7 +69,7 @@ function BookModify(){
                                 <Navbar/>  
                                 <div class="container">
                                     <div>
-                                         
+                                        <img class="im1" src={Img1} alt="Vector Image"></img>                                           
                                         <div class="heading1">
                                         <h1>Book</h1>                
                                         </div>   

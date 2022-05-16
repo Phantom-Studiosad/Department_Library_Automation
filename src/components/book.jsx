@@ -8,6 +8,7 @@ import { getDatabase, ref, set } from "firebase/database";
 import {
     getAuth
 } from "firebase/auth"
+import Img1 from "../images/books.png"
 
 
 
@@ -73,7 +74,7 @@ function Book(){
                                 <Navbar/>  
                                 <div class="container">
                                     <div>
-                                         
+                                        <img class="im1" src={Img1} alt="Vector Image"></img>                                           
                                         <div class="heading1">
                                         <h1>Book</h1>                
                                         </div>   

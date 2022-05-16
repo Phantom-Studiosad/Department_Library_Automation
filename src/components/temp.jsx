@@ -7,31 +7,34 @@ import splash_bg from '../images/Library.gif'
 import Avatar from "../images/avatar.png"
 import Popup from 'reactjs-popup';
 import app from '../firebase';
-import { getDatabase, ref, child, get, set } from "firebase/database";
+import { getDatabase, ref, child, get,set } from "firebase/database";
 import {
     getAuth,
     signOut,
 } from "firebase/auth"
 
 
-function RHomepage(){
-    const [showButton, setShowButton] = useState(false);
+function Homepage(){
     const auth = getAuth(app);
+    const [showButton, setShowButton] = useState(false);
     const [userEmail, setuserEmail] = useState("");
     const [fname, setFname] = useState("");
     const [lname, setLname] = useState("");
     const [department, setDepartment] = useState("");
+    const [borrowerId, setborrowerId] = useState("");
+    const [borrowBookId, setborrowBookId] = useState("");
+    const [bookNames, setBookNames] = useState(['']);
     const [blog ,setBlog] = useState("");
     const [roll, setRoll] = useState("");
     const [bstate, setBstate] = useState({});
 
-    const  constructor = () =>{
+   const  constructor = () =>{
         const user = auth.currentUser;
         setRoll(userEmail.substring(8,16));
         if (user !== null) {
             setuserEmail(user.email);
             const dbRef = ref(getDatabase(app));
-            get(child(dbRef, `Research/${roll}`)).then((snapshot) => {
+            get(child(dbRef, `Users/${roll}`)).then((snapshot) => {
             if (snapshot.exists()) {
                 setFname(snapshot.val().firstName.toUpperCase());
                 setLname(snapshot.val().lastName.toUpperCase());
@@ -42,10 +45,26 @@ function RHomepage(){
             }).catch((error) => {
             console.error(error);
             });
+            //Borrow Details
+            get(child(dbRef, `Borrow/${roll}`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                snapshot.forEach((childSnapshot) => {
+                    setBookNames(bookNames.concat(childSnapshot.val().bookName));
+                })
+            }
+            else{
+                console.log("No borrow data available");
+            }
+            }).catch((error) => {
+            console.error(error);
+            });
         };
+        console.log(bookNames);
+        
     };
-
+    
     useEffect(() => {
+
       window.addEventListener("scroll", () => {
         if (window.pageYOffset > 100) {
           setShowButton(true);
@@ -54,7 +73,7 @@ function RHomepage(){
         }
       });
     }, []);
-
+    
     const [loading,setLoading] = useState(false);
     useEffect(()=>{
         setLoading(true)
@@ -70,11 +89,43 @@ function RHomepage(){
         behavior: 'smooth' // for smoothly scrolling
       });
     };
+
     const logout = async () => {
         await signOut(auth);
         window.alert("User logged out successfully!")
       };
-      function bpost(){
+
+    const borrowBook = () => {
+        const dbRef = ref(getDatabase(app));
+        const db = getDatabase(app);
+        get(child(dbRef, `Books/${borrowBookId}`)).then((snapshot) => {
+        if (snapshot.exists()) {
+            get(child(dbRef, `Users/${borrowerId}`)).then((snap) => {
+            if (snap.exists()) {
+
+                var due = new Date();
+                due.setDate(due.getDate() + 15);
+                set(ref(db, 'Borrow/' + borrowerId+'/'+borrowBookId), {
+                    bookName: snapshot.val().bookName,
+                    borrowDate: new Date().toLocaleDateString(),
+                    dueDate: due.toLocaleDateString(),
+                  }).then(window.alert('Book Borrowed!')).catch((e) => {console.log(e)});
+            } else {
+                window.alert("Check your Borrower-Id");
+            }
+            }).catch((error) => {
+            console.error(error);
+            });
+        }
+        else {
+            window.alert("Check your Book-Id");
+        }
+           
+        }).catch((error) => {
+        console.error(error);
+        });
+    }
+    function bpost(){
         const db = getDatabase(app);
         set(ref(db, 'Blog/' + roll),{
             user : roll,
@@ -152,8 +203,9 @@ function RHomepage(){
                                             <ul class="nav navbar-nav navbar-right">
                                                 <li><Link to="/opac"><b>OPAC</b></Link></li>
                                                 <li><Link><b><span class="fa fa-globe" title='Blog'></span></b></Link></li>
+                                                <li><Link><b><span class="fa fa-envelope" title='Messages'></span></b></Link></li>
                                                 <li><Link><b><span class="fa fa-bell" title='Notifications'></span></b></Link></li>
-                                                <li><Link to="/rprofilepage"><b><span class="fa fa-user" title='Profile'></span></b></Link></li>
+                                                <li><Link to="/profilepage"><b><span class="fa fa-user" title='Profile'></span></b></Link></li>
                                                 <li><Link to="/login" style={{margin:"0px",padding:"0px"}}><button class="btn navbar-btn login" onClick={logout}><span class="fa fa-sign-out"></span> LogOut</button></Link></li>
                                             </ul>      
                                         </div>
@@ -174,7 +226,7 @@ function RHomepage(){
                                                     <div class="hp_profile">
                                                         <p><i class="fa fa-user" style={{marginRight:"15px"}}></i>{fname} {lname}</p>
                                                         <p><i class="fa fa-credit-card" style={{marginRight:"15px"}}></i>{userEmail.substring(0,16).toUpperCase()}</p>
-                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>{department}</p>                                                        
+                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>B.Tech {department}</p>                                                       
                                                     </div>                                                    
                                                 </div>
                                             </div>
@@ -185,9 +237,30 @@ function RHomepage(){
                                                     <h4 class="w3-center">Borrowed Books</h4>
                                                     <hr></hr>
                                                     <div class="hp_profile">
-                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>Book1</p>     
-                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>Book2</p>     
-                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>Book3</p>                                                       
+                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>{bookNames[1]}</p>     
+                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>{bookNames[2]}</p>     
+                                                        <p><i class="fa fa-book" style={{marginRight:"15px"}}></i>{bookNames[3]}</p> 
+                                                        <Popup trigger={<button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-code-fork"></span> Borrow</button>} 
+                                                            position="center center">
+                                                            <div class="pop_card box">
+                                                                <div class="login-container1 animated flipInX main-heading">
+                                                                    <h3>Borrow Details</h3>
+                                                                    <form class="margin-t">
+                                                                        <div class="form-group inputContainer">  
+                                                                            <i class="fa fa-book icon"> </i>                                              
+                                                                            <input type="text" class="form-control formc" placeholder="Book ID" onChange={(event) => { setborrowBookId(event.target.value); }} required></input>
+                                                                        </div>
+                                                                        <div class="form-group inputContainer">
+                                                                            <i class="fa fa-user icon"> </i>
+                                                                            <input type="text" id="myInput" class="form-control formc" placeholder="User ID" onChange={(event) => { setborrowerId(event.target.value); }} required></input>
+                                                                        </div>
+                                                                        <div class="text-c">
+                                                                            <button type="button" class="btn navbar-btn loginp1 margin-b" onClick={borrowBook}><span class="fa fa-code-fork"></span> Borrow</button>                                                                                   
+                                                                        </div>                                            
+                                                                    </form>
+                                                                </div>                                                            
+                                                            </div>
+                                                </Popup>                                                       
                                                     </div>                                                    
                                                 </div>
                                             </div>                                                    
@@ -207,7 +280,7 @@ function RHomepage(){
                                                         <span class="w3-tag w3-small w3-theme-d4">Comic Book or Graphic Novel</span>
                                                     </p>
                                                 </div>
-                                            </div>                                                 
+                                            </div>
                                         </div>
 
                                         <div class="w3-col m6">
@@ -243,10 +316,10 @@ function RHomepage(){
                                             <hr></hr>   
                                             <div class="hp_profile">
                                                 <p>Amount: ₹0</p>  
-                                                <Popup trigger={<button class="btn navbar-btn guestp margin-b"><span class="fa fa-rupee"></span> Pay Fine</button>} 
+                                                <Popup trigger={<button class="btn navbar-btn guestp1 margin-b"><span class="fa fa-rupee"></span> Pay Fine</button>} 
                                                             position="center center">
-                                                            <div class="login_card">
-                                                                <div class="login-container animated flipInX main-heading">
+                                                            <div class="pop_card box">
+                                                                <div class="login-container1 animated flipInX main-heading">
                                                                     <h3>Select Payment Mode</h3>
                                                                     <form class="margin-t">
                                                                         <div>
@@ -266,7 +339,7 @@ function RHomepage(){
                                                                             </ul>                                                                        
                                                                         </div>
                                                                         <div class="text-c">
-                                                                            <button type="button" class="btn navbar-btn loginp margin-b">Proceed To Pay</button>                                                                                   
+                                                                            <button type="button" class="btn navbar-btn loginp1 margin-b">Proceed To Pay</button>                                                                                   
                                                                         </div>                                            
                                                                     </form>
                                                                 </div>                                                            
@@ -276,11 +349,6 @@ function RHomepage(){
                                             </div>
                                             <br></br>
                                             
-                                            <div class="w3-card w3-round homepage_bg w3-padding-16 w3-center">
-                                                <h4 class="w3-center">Research Paper</h4>
-                                                <Link to="/publishpaper"><button class="btn navbar-btn guestp margin-b"><span class="fa fa-pencil"></span>  Publish</button></Link>
-                                            </div> <br></br>
-
                                             <div class="w3-card w3-round homepage_bg w3-padding-6 w3-center">
                                                 <h4 class="w3-center">Bug Report</h4>
                                                 <p><i class="fa fa-bug w3-xxlarge"></i></p>
@@ -304,5 +372,4 @@ function RHomepage(){
     )
 }
 
-export default RHomepage;
-
+export default Homepage;
