@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import PuffLoader from "react-spinners/PuffLoader";
 import "../App.css"
 import Foot from './footer';
@@ -12,6 +12,7 @@ import {
     getAuth,
     signOut,
 } from "firebase/auth"
+import useRazorpay from "react-razorpay";
 
 
 function Homepage(){
@@ -21,6 +22,61 @@ function Homepage(){
     const [fname, setFname] = useState("");
     const [lname, setLname] = useState("");
     const [department, setDepartment] = useState("");
+
+    const makePayment = async () => {
+        console.log("here...");
+        const res = await initializeRazorpay();
+    
+        if (!res) {
+          alert("Razorpay SDK Failed to load");
+          return;
+        }
+    
+        // Make API call to the serverless API
+        const data = await fetch("/api/razorpay", { method: "POST" }).then((t) =>
+        t.json()
+        );
+        console.log(data);
+        var options = {
+          key: process.env.RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
+          name: "E-Library Automation",
+          currency: data.currency,
+          amount: data.amount,
+          order_id: data.id,
+          description: "Fine Payment",
+          image: "https://raw.githubusercontent.com/dharun-narayanan/Department_Library_Automation/master/src/images/Library.gif",
+          handler: function (response) {
+            // Validate payment at server - using webhooks is a better idea.
+            alert(response.razorpay_payment_id);
+            alert(response.razorpay_order_id);
+            alert(response.razorpay_signature);
+          },
+          prefill: {
+            name: "E-Library",
+            email: "elibraryautomation@gmail.com",
+            contact: "9597342348",
+          },
+        };
+    
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
+      };
+      const initializeRazorpay = () => {
+        return new Promise((resolve) => {
+          const script = document.createElement("script");
+          script.src = "https://checkout.razorpay.com/v1/checkout.js";
+          // document.body.appendChild(script);
+    
+          script.onload = () => {
+            resolve(true);
+          };
+          script.onerror = () => {
+            resolve(false);
+          };
+    
+          document.body.appendChild(script);
+        });
+      };
 
    const  constructor = () =>{
         const user = auth.currentUser;
@@ -268,7 +324,7 @@ function Homepage(){
                                                                             </ul>                                                                        
                                                                         </div>
                                                                         <div class="text-c">
-                                                                            <button type="button" class="btn navbar-btn loginp1 margin-b">Proceed To Pay</button>                                                                                   
+                                                                            <button type="button" class="btn navbar-btn loginp1 margin-b" onClick={makePayment}>Proceed To Pay</button>                                                                               
                                                                         </div>                                            
                                                                     </form>
                                                                 </div>                                                            

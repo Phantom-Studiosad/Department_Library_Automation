@@ -1511,6 +1511,10 @@ select.list-dt:focus {
   border-color: #afd7f5;
 }
 
+.rcard > h2{
+  color: white;
+}
+
 .fs-title {
   font-size: 25px;
   color: #2C3E50;
